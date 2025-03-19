@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "allowJs": false,
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "types",
+    "strictPropertyInitialization": false,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    // "verbatimModuleSyntax": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/**.test.ts"
+  ]
+}

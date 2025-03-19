@@ -1,0 +1,20 @@
+import { type TaskMeta, type TaskResult } from "./scheduler";
+type FileUploaderOptions = {
+    url: string;
+    file: Blob;
+    method?: string;
+    headers?: Record<string, string>;
+    chunkSize?: number;
+    parallelCount?: number;
+    rejectOnRetryFailed?: boolean;
+    data?: (chunk: Blob, chunkIndex: number, totalChunks: number) => Record<string, any>;
+    onUploadProgress?: (progress: number) => void;
+    onChunkUploadSuccess?: (data: unknown, meta: TaskMeta) => void;
+    onChunkUploadFialed?: (error: unknown, meta: TaskMeta) => void;
+    onSuccess?: (datas: TaskResult[]) => void;
+    onFailed?: (error: unknown) => void;
+    onCancelled?: (reason: unknown) => void;
+};
+type CancelUpload = (reason?: unknown) => void;
+export default function fileUploader(options: FileUploaderOptions): CancelUpload;
+export {};
