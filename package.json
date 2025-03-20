@@ -5,7 +5,7 @@
   "author": "xiaoooyooo <xiaoooyooo@gmail.com> (https://github.com/xiaoooyooo)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Xiaoooyooo/file-chunks-up"
+    "url": "git+https://github.com/Xiaoooyooo/file-chunks-up.git"
   },
   "keywords": [
     "file",
