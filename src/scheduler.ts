@@ -1,5 +1,5 @@
 import { noop } from "./helpers";
-import { CancelTaskError } from "./errors";
+import { SchedulerCancelError, SchedulerTaskFailedError } from "./errors";
 
 type Task = (signal: AbortSignal) => Promise<unknown>;
 export type TaskMeta = {
@@ -51,7 +51,7 @@ export default class Scheduler {
       task: function (signal) {
         return new Promise((resolve, reject) => {
           signal.addEventListener("abort", function () {
-            reject(new CancelTaskError());
+            reject(new SchedulerCancelError());
           });
           task(signal).then(resolve, reject);
         });
@@ -101,7 +101,7 @@ export default class Scheduler {
       onTaskCompleted(result, meta);
       this.results[meta.index] = { success: true, result };
     } catch (error) {
-      if (error instanceof CancelTaskError) {
+      if (error instanceof SchedulerCancelError) {
         shouldContinue = false;
       }
       if (meta.leftRetryTimes > 0) {
@@ -113,7 +113,7 @@ export default class Scheduler {
         onTaskFailed(error, meta);
         if (rejectOnTaskFailed) {
           this.handleFailed(error);
-          this.cancel();
+          this.cancel(new SchedulerTaskFailedError());
           shouldContinue = false;
         }
       }
@@ -137,9 +137,9 @@ export default class Scheduler {
 
   cancel(reason?: unknown) {
     this.tasks = [];
-    reason = reason || new Error("Upload progress cancelled!");
+    reason = reason || new SchedulerCancelError();
     if (this.abortController) {
-      this.abortController.abort(new CancelTaskError());
+      this.abortController.abort(reason);
       this.abortController = null;
     }
     this.handleCancel(reason);

@@ -1,3 +1,5 @@
+import { UploadAbortedError, UploadTimeoutError } from "./errors";
+
 type UploaderOptions = {
   url: string;
   method: string;
@@ -37,13 +39,13 @@ export default function uploader<T = unknown>(options: UploaderOptions) {
       }
     });
     xhr.addEventListener("abort", function () {
-      reject();
+      reject(new UploadAbortedError());
     });
     xhr.addEventListener("error", function () {
       reject(xhr.response);
     });
     xhr.addEventListener("timeout", function () {
-      reject(new Error("Connected timeout"));
+      reject(new UploadTimeoutError());
     });
     xhr.upload.addEventListener("progress", function (e) {
       onProgress(e.loaded, e.total);
